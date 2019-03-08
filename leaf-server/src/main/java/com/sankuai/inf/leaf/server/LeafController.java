@@ -7,6 +7,7 @@ import com.sankuai.inf.leaf.server.exception.NoKeyException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -20,8 +21,13 @@ public class LeafController {
     SnowflakeService snowflakeService;
 
     @RequestMapping(value = "/api/segment/get/{key}")
-    public String getSegmentID(@PathVariable("key") String key) {
-        return get(key, segmentService.getId(key));
+    public String getSegmentID(@PathVariable("key") String key,String prefix) {
+        if (StringUtils.isEmpty(prefix)){
+            prefix="";
+        }
+        String no = get(key, segmentService.getId(key));
+        int random = (int) ((Math.random() * 9 + 1) * 100);
+        return prefix + no + random;
     }
 
     @RequestMapping(value = "/api/snowflake/get/{key}")
